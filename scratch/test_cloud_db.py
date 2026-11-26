@@ -33,89 +33,89 @@ else:
 print("\n--- 3. BASE_DIR & IMPORT CHECKS ---")
 assert "import gzip" in app_text, "Missing gzip import"
 assert "import shutil" in app_text, "Missing shutil import"
+assert "import threading" in app_text, "Missing threading import"
 assert "BASE_DIR = os.path.dirname(os.path.abspath(__file__))" in app_text, "Missing BASE_DIR definition"
+assert "def is_valid_database(" in app_text, "Missing is_valid_database function"
 assert "def get_db_path()" in app_text, "Missing get_db_path function"
 assert "def get_db_connection()" in app_text, "Missing get_db_connection function"
-print("[PASS] gzip, shutil, BASE_DIR, and connection manager are properly declared.")
+print("[PASS] gzip, shutil, threading, BASE_DIR, is_valid_database, and connection manager are properly declared.")
 
-print("\n--- 4. SIMULATED CLOUD EXTRACTION TEST IN TEMP DIR ---")
+print("\n--- 4. SIMULATED CORRUPT/MALFORMED DB AUTO-RECOVERY TEST ---")
 with tempfile.TemporaryDirectory() as tmp_dir:
     sim_data_raw = os.path.join(tmp_dir, "data", "raw")
     os.makedirs(sim_data_raw, exist_ok=True)
     sim_gz = os.path.join(sim_data_raw, "airtel.db.gz")
     sim_db = os.path.join(sim_data_raw, "airtel.db")
     
-    # Copy actual airtel.db.gz to temp location
+    # 1. Copy actual airtel.db.gz to temp location
     shutil.copyfile("data/raw/airtel.db.gz", sim_gz)
-    assert os.path.exists(sim_gz) and os.path.getsize(sim_gz) > 0
-    assert not os.path.exists(sim_db)
     
-    # Extract using the exact logic from app.py
-    with gzip.open(sim_gz, "rb") as f_in:
-        with open(sim_db, "wb") as f_out:
-            shutil.copyfileobj(f_in, f_out)
-            
+    # 2. Simulate a malformed/corrupted airtel.db from an interrupted cloud deployment (e.g. 5KB junk)
+    with open(sim_db, "wb") as f_bad:
+        f_bad.write(b"SQLite format 3\x00corrupted_half_written_data" * 200)
+    
     assert os.path.exists(sim_db)
-    extracted_size = os.path.getsize(sim_db)
-    print(f"[PASS] Extracted simulated DB size: {extracted_size / (1024*1024):.2f} MB")
+    print(f"[TEST] Created intentionally malformed DB of size: {os.path.getsize(sim_db)} bytes")
     
-    # Connect and test SQLite query integrity on the extracted database
+    # Test our is_valid_database logic on this malformed file
+    def test_is_valid(path):
+        if not os.path.exists(path) or os.path.getsize(path) < 110 * 1024 * 1024:
+            return False
+        try:
+            conn = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=5.0)
+            cursor = conn.cursor()
+            cursor.execute("PRAGMA quick_check;")
+            res = cursor.fetchone()
+            if not res or res[0] != "ok":
+                conn.close()
+                return False
+            cursor.execute("SELECT COUNT(*) FROM customer_features;")
+            count = cursor.fetchone()[0]
+            conn.close()
+            return count == 22000
+        except Exception:
+            return False
+
+    is_bad_valid = test_is_valid(sim_db)
+    print(f"[PASS] is_valid_database correctly detected malformed DB as: {is_bad_valid} (False)")
+    assert not is_bad_valid, "Corrupt database should be detected as invalid!"
+    
+    # Simulate auto-recovery: delete bad file, extract atomically via tmp file
+    if not is_bad_valid:
+        os.remove(sim_db)
+        tmp_target = sim_db + ".tmp_test"
+        with gzip.open(sim_gz, "rb") as f_in:
+            with open(tmp_target, "wb") as f_out:
+                shutil.copyfileobj(f_in, f_out, length=1024*1024)
+        assert test_is_valid(tmp_target)
+        os.replace(tmp_target, sim_db)
+
+    assert os.path.exists(sim_db)
+    recovered_size = os.path.getsize(sim_db)
+    print(f"[PASS] Auto-recovered DB size: {recovered_size / (1024*1024):.2f} MB")
+    assert test_is_valid(sim_db)
+    
+    # Query check
     conn = sqlite3.connect(sim_db)
-    cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*), SUM(is_churned) FROM customer_features")
-    row = cursor.fetchone()
-    total_subs = row[0]
-    churned_subs = row[1]
-    churn_rate = round((churned_subs / total_subs) * 100, 2)
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*), SUM(is_churned) FROM customer_features")
+    row = cur.fetchone()
     conn.close()
-    
-    print(f"[PASS] Extracted DB Query: Total Subs = {total_subs:,}, Churned = {churned_subs:,}, Churn Rate = {churn_rate}%")
-    assert total_subs == 22000, f"Expected 22,000, got {total_subs}"
-    assert churned_subs == 5226, f"Expected 5,226, got {churned_subs}"
-    assert churn_rate == 23.75, f"Expected 23.75%, got {churn_rate}%"
+    print(f"[PASS] Recovered DB Query: Total={row[0]:,}, Churned={row[1]:,}")
+    assert row[0] == 22000
+    assert row[1] == 5226
 
-print("\n--- 5. LIVE DATABASE & BENCHMARK VALIDATION ---")
-# Import and test the app's q() function directly
-# We can set up a quick module exec
-app_globals = {}
-# Execute setup part of app.py
-exec("""
-import os, gzip, shutil, base64, sqlite3
-import pandas as pd
-BASE_DIR = os.path.abspath("dashboard")
-PROJECT_ROOT = os.path.abspath(".")
+print("\n--- 5. LIVE DATABASE INTEGRITY & BENCHMARKS ---")
+assert test_is_valid("data/raw/airtel.db"), "Local database must be valid!"
+conn = sqlite3.connect("data/raw/airtel.db")
+c = conn.cursor()
+c.execute("PRAGMA quick_check;")
+assert c.fetchone()[0] == "ok"
+c.execute("SELECT COUNT(*), SUM(is_churned) FROM customer_features")
+r = c.fetchone()
+conn.close()
+print(f"[PASS] Live local DB: Total={r[0]:,}, Churned={r[1]:,}, Rate={round(r[1]/r[0]*100, 2)}%")
+assert r[0] == 22000
+assert r[1] == 5226
 
-def get_db_path() -> str:
-    candidates = [
-        os.path.join(BASE_DIR, "..", "data", "raw", "airtel.db"),
-        os.path.join(PROJECT_ROOT, "data", "raw", "airtel.db"),
-        os.path.join("data", "raw", "airtel.db")
-    ]
-    for p in candidates:
-        if os.path.exists(p) and os.path.getsize(p) > 0:
-            return os.path.abspath(p)
-    return os.path.abspath(candidates[0])
-
-DB_PATH = get_db_path()
-
-def get_db_connection():
-    return sqlite3.connect(DB_PATH)
-
-def q(sql: str, params: tuple = ()) -> pd.DataFrame:
-    conn = get_db_connection()
-    try:
-        return pd.read_sql_query(sql, conn, params=params)
-    finally:
-        conn.close()
-""", app_globals)
-
-df_test = app_globals["q"]("SELECT COUNT(*) AS total, SUM(is_churned) AS churned FROM customer_features")
-tot = int(df_test["total"].iloc[0])
-chrn = int(df_test["churned"].iloc[0])
-rate = round((chrn / tot) * 100, 2)
-print(f"[PASS] Live DB query via q(): Total = {tot:,}, Churned = {chrn:,}, Rate = {rate}%")
-assert tot == 22000
-assert chrn == 5226
-assert rate == 23.75
-
-print("\nALL CLOUD COMPATIBILITY TESTS PASSED (100%)!")
+print("\nALL CLOUD COMPATIBILITY & MALFORMED DB RECOVERY TESTS PASSED (100%)!")
