@@ -1,4 +1,6 @@
 import os
+import gzip
+import shutil
 import base64
 import sqlite3
 import pandas as pd
@@ -9,17 +11,24 @@ import streamlit as st
 # ==============================================================================
 # 1. STREAMLIT CONFIGURATION & ASSETS RESOLUTION
 # ==============================================================================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, ".."))
+
 def resolve_asset_path(filename: str) -> str:
-    """Resolves asset paths using relative paths first, followed by safe fallbacks."""
+    """
+    Resolves asset paths using BASE_DIR and relative paths reliably
+    across Windows local development and Streamlit Community Cloud (Linux).
+    """
     candidates = [
-        os.path.join(os.path.dirname(__file__), "assets", filename),
+        os.path.join(BASE_DIR, "assets", filename),
+        os.path.join(PROJECT_ROOT, "dashboard", "assets", filename),
         os.path.join("dashboard", "assets", filename),
-        os.path.join(r"C:\Users\dbila\Desktop\airtel-telecom-analytics\dashboard\assets", filename)
+        os.path.join("assets", filename)
     ]
     for p in candidates:
         if os.path.exists(p):
-            return p
-    return os.path.join(os.path.dirname(__file__), "assets", filename)
+            return os.path.abspath(p)
+    return os.path.abspath(os.path.join(BASE_DIR, "assets", filename))
 
 LOGO_IMAGE_PATH = resolve_asset_path("airtel_logo.png")
 BG_IMAGE_PATH = resolve_asset_path("airtel_cyber_bg.jpg")
@@ -128,29 +137,79 @@ st.markdown(f"<style>{css_content}\n{bg_injection_css}</style>", unsafe_allow_ht
 # 2. DATABASE RESOLUTION & REUSABLE SQL HELPER
 # ==============================================================================
 def get_db_path() -> str:
-    """Returns the verified path to the SQLite database using relative paths first."""
+    """
+    Resolves the SQLite database path using BASE_DIR and relative paths.
+    Automatically extracts 'airtel.db.gz' into 'data/raw/airtel.db' when the
+    uncompressed database does not exist (e.g. on Streamlit Community Cloud).
+    Preserves existing local database without modification.
+    """
+    # Primary candidate paths for uncompressed database
     candidates = [
-        os.path.join(os.path.dirname(__file__), "..", "data", "raw", "airtel.db"),
-        os.path.join("data", "raw", "airtel.db"),
-        r"C:\Users\dbila\Desktop\airtel-telecom-analytics\data\raw\airtel.db"
+        os.path.join(BASE_DIR, "..", "data", "raw", "airtel.db"),
+        os.path.join(PROJECT_ROOT, "data", "raw", "airtel.db"),
+        os.path.join("data", "raw", "airtel.db")
     ]
+    
+    # 1. If uncompressed database already exists and has content, use it directly
     for p in candidates:
-        if os.path.exists(p):
-            return p
-    return "data/raw/airtel.db"
+        if os.path.exists(p) and os.path.getsize(p) > 0:
+            return os.path.abspath(p)
+            
+    # Target extraction path
+    target_db_path = os.path.abspath(candidates[0])
+    target_dir = os.path.dirname(target_db_path)
+    os.makedirs(target_dir, exist_ok=True)
+    
+    # 2. Check candidate paths for compressed archive
+    gz_candidates = [
+        os.path.join(BASE_DIR, "..", "data", "raw", "airtel.db.gz"),
+        os.path.join(PROJECT_ROOT, "data", "raw", "airtel.db.gz"),
+        os.path.join("data", "raw", "airtel.db.gz"),
+        target_db_path + ".gz"
+    ]
+    gz_path = None
+    for gz in gz_candidates:
+        if os.path.exists(gz) and os.path.getsize(gz) > 0:
+            gz_path = os.path.abspath(gz)
+            break
+            
+    # Show clear error if neither uncompressed nor compressed database exists
+    if not gz_path:
+        st.error(
+            f"❌ Database file not found at: {target_db_path}\n\n"
+            f"Compressed archive 'airtel.db.gz' was also not found in '{target_dir}'. "
+            "Please ensure 'data/raw/airtel.db.gz' is committed and pushed to your GitHub repository."
+        )
+        return target_db_path
+
+    # 3. Automatically extract airtel.db.gz into data/raw/airtel.db
+    try:
+        with st.spinner("📦 Extracting database archive (airtel.db.gz) for first-time setup on Streamlit Cloud..."):
+            with gzip.open(gz_path, "rb") as f_in:
+                with open(target_db_path, "wb") as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+    except Exception as e:
+        st.error(f"❌ Failed to extract database from '{gz_path}': {e}")
+        return target_db_path
+        
+    return target_db_path
 
 DB_PATH = get_db_path()
+
+def get_db_connection():
+    """Creates a single managed connection to SQLite to avoid duplicate connections."""
+    return sqlite3.connect(DB_PATH)
 
 @st.cache_data(ttl=600, show_spinner=False)
 def q(sql: str, params: tuple = ()) -> pd.DataFrame:
     """
     Executes a parameterized SQL query on the SQLite database.
-    Calculates all metrics directly inside SQL and safely handles connections and errors.
+    Uses the extracted database path, safely manages connection lifecycle, and avoids duplicate connections.
     """
     if not os.path.exists(DB_PATH):
         st.error(f"Database file not found at: {DB_PATH}")
         return pd.DataFrame()
-    conn = sqlite3.connect(DB_PATH)
+    conn = get_db_connection()
     try:
         df = pd.read_sql_query(sql, conn, params=params)
     except Exception as e:
