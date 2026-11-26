@@ -1,6 +1,8 @@
-data/raw/
+data/raw/*
+!data/raw/airtel.db
 data/processed/
 *.db
+!data/raw/airtel.db
 *.csv
 .venv/
 __pycache__/
