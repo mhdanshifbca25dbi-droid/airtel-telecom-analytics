@@ -1,0 +1,871 @@
+/* ==============================================================================
+   AIRTEL TELECOM ANALYTICS — ENTERPRISE RETENTION INTELLIGENCE (THEME & ANIMATIONS)
+   Brand Red: #ED1C24 / #E60000 | Navy: #0B132B / #14213D
+   ============================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --airtel-red: #ED1C24;
+  --airtel-red-dark: #C40000;
+  --airtel-red-glow: rgba(237, 28, 36, 0.35);
+  --airtel-red-soft: #FFF1F2;
+  --airtel-red-border: #FECDD3;
+  --navy-dark: #0B132B;
+  --navy-surface: #14213D;
+  --navy-light: #1E293B;
+  --slate-sub: #CBD5E1;
+  --slate-light: #F1F5F9;
+  --card-bg: rgba(11, 19, 43, 0.88);
+  --card-border: rgba(255, 255, 255, 0.18);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 10px 30px -4px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(237, 28, 36, 0.15);
+  --shadow-hover: 0 18px 36px -4px rgba(237, 28, 36, 0.35), 0 6px 14px -2px rgba(0, 0, 0, 0.30);
+}
+
+/* Global Typography */
+html, body, [class*="css"] {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* App Background with subtle translucent glassmorphic backdrop */
+.stApp {
+  background-color: transparent !important;
+  background: transparent !important;
+  transition: all 0.3s ease;
+  min-height: 100vh;
+}
+
+/* Compact no-scroll layout container */
+.block-container {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+  padding-left: 1.10rem !important;
+  padding-right: 1.10rem !important;
+  max-width: 100% !important;
+}
+
+header[data-testid="stHeader"] {
+  height: 0.8rem !important;
+  min-height: 0.8rem !important;
+  background: transparent !important;
+  z-index: 10 !important;
+}
+
+[data-testid="stVerticalBlock"] {
+  gap: 0.45rem !important;
+}
+
+[data-testid="stHorizontalBlock"] {
+  gap: 1.0rem !important;
+}
+
+/* ==============================================================================
+   ANIMATED SIDEBAR STYLING
+   ============================================================================== */
+section[data-testid="stSidebar"], [data-testid="stSidebar"] {
+  min-width: 325px !important;
+  max-width: 360px !important;
+  width: 335px !important;
+  border-right: 2px solid rgba(237, 28, 36, 0.40) !important;
+  box-shadow: 6px 0 26px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-testid="stSidebar"] hr {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  margin: 12px 0 !important;
+}
+
+[data-testid="stSidebar"] label {
+  color: #E2E8F0 !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox > div > div {
+  background-color: rgba(255, 255, 255, 0.09) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 10px !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox > div > div:hover {
+  border-color: #ED1C24 !important;
+  box-shadow: 0 0 14px rgba(237, 28, 36, 0.5) !important;
+  background-color: rgba(255, 255, 255, 0.13) !important;
+}
+
+[data-testid="stSidebar"] .stSelectbox svg {
+  fill: #CBD5E1 !important;
+  color: #CBD5E1 !important;
+}
+
+/* Sidebar Radio Buttons */
+[data-testid="stSidebar"] .stRadio label span {
+  color: #F8FAFC !important;
+  font-weight: 600 !important;
+}
+
+/* Sidebar Buttons & Presets */
+[data-testid="stSidebar"] button {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(237, 28, 36, 0.22) 100%) !important;
+  border: 1px solid rgba(237, 28, 36, 0.45) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  font-size: 0.80rem !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  width: 100% !important;
+  white-space: normal !important;
+  height: auto !important;
+  min-height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin-bottom: 6px !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-testid="stSidebar"] button:hover {
+  background: linear-gradient(135deg, #ED1C24 0%, #FF3D44 100%) !important;
+  border-color: #FF5252 !important;
+  box-shadow: 0 4px 14px rgba(237, 28, 36, 0.65) !important;
+  transform: translateY(-2px) !important;
+  color: #FFFFFF !important;
+}
+
+/* Sidebar Brand Header Card */
+.sidebar-brand-box {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 16px 14px;
+  margin-bottom: 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-brand-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ED1C24, #FF5252, #ED1C24);
+  animation: shimmerBorder 3s infinite linear;
+}
+
+.sidebar-logo-img {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(237, 28, 36, 0.6), 0 0 0 2px rgba(255, 255, 255, 0.3);
+  animation: pulseLogo 3s ease-in-out infinite alternate;
+  margin-bottom: 8px;
+  object-fit: cover;
+}
+
+.sidebar-telemetry-card {
+  background: linear-gradient(135deg, rgba(237, 28, 36, 0.15) 0%, rgba(11, 19, 43, 0.35) 100%);
+  border: 1px solid rgba(237, 28, 36, 0.40);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 14px;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* ==============================================================================
+   ANIMATED HEADER BANNER WITH AIRTEL LOGO (COMPACT FIT-SCREEN)
+   ============================================================================== */
+.dashboard-header-container {
+  background: linear-gradient(135deg, #0B132B 0%, #1A0B1E 30%, #7F1D1D 70%, #B91C1C 100%);
+  background-size: 200% 200%;
+  animation: gradientFlow 12s ease infinite, fadeInDown 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 10px;
+  padding: 5px 16px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 5px solid #ED1C24;
+  box-shadow: 0 4px 16px rgba(185, 28, 28, 0.25);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-header-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FF5252, #FFFFFF, #FF5252, transparent);
+  box-shadow: 0 0 10px #ED1C24, 0 0 20px #ED1C24;
+  animation: laserSweep 5s ease-in-out infinite;
+  z-index: 3;
+}
+
+.dashboard-header-container::after {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(237, 28, 36, 0.5) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 2;
+}
+
+/* User's Official Airtel Logo Styling & Animation */
+.airtel-main-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(237, 28, 36, 0.55), 0 0 0 2px rgba(255, 255, 255, 0.25);
+  animation: pulseLogo 3s ease-in-out infinite alternate;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.airtel-main-logo:hover {
+  transform: scale(1.08) rotate(-2deg);
+  box-shadow: 0 8px 20px rgba(237, 28, 36, 0.8), 0 0 0 2.5px #FFFFFF;
+}
+
+.header-text-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-title-text {
+  color: #FFFFFF;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.2;
+}
+
+.header-badge {
+  background: linear-gradient(135deg, #ED1C24 0%, #FF3D44 100%);
+  color: #FFFFFF;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(237, 28, 36, 0.45);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-subtitle {
+  color: #E2E8F0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin: 1px 0 2px 0;
+}
+
+.header-statement {
+  color: #94A3B8;
+  font-size: 0.70rem;
+  font-style: italic;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 2px;
+}
+
+/* Header Right Telemetry Pill */
+.header-right-telemetry {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 6px 14px;
+  text-align: right;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pulse-indicator {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background-color: #10B981;
+  border-radius: 50%;
+  animation: pulseDot 2s infinite;
+  margin-right: 6px;
+}
+
+/* ==============================================================================
+   ANIMATED KPI METRIC CARDS
+   ============================================================================== */
+.kpi-card {
+  background: var(--card-bg) !important;
+  backdrop-filter: blur(14px) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 10px !important;
+  padding: 8px 14px 6px 14px !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  min-height: 88px !important;
+  margin-bottom: 0px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.kpi-card:hover {
+  transform: translateY(-3px) scale(1.004);
+  box-shadow: 0 8px 18px -2px rgba(237, 28, 36, 0.15);
+  border-color: rgba(237, 28, 36, 0.35);
+}
+
+/* Perfect top accent strip via pseudo-element to avoid asymmetric border-radius artifacts */
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 12px 12px 0 0;
+  z-index: 2;
+}
+
+.kpi-card-1::before {
+  background: linear-gradient(90deg, #0284C7 0%, #38BDF8 100%);
+}
+
+.kpi-card-2::before {
+  background: linear-gradient(90deg, #7C3AED 0%, #A78BFA 100%);
+}
+
+.kpi-card-3::before {
+  background: linear-gradient(90deg, #ED1C24 0%, #FF6B6B 100%);
+}
+
+.kpi-card-1 { animation-delay: 0.05s; }
+.kpi-card-2 { animation-delay: 0.15s; }
+.kpi-card-3 { animation-delay: 0.25s; }
+
+.kpi-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-bottom: 3px;
+}
+
+.kpi-badge-blue { background: #E0F2FE; color: #0284C7; }
+.kpi-badge-purple { background: #EDE9FE; color: #7C3AED; }
+.kpi-badge-red { background: #FEE2E2; color: #DC2626; }
+
+.kpi-title {
+  color: #CBD5E1 !important;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.kpi-value {
+  color: #FFFFFF !important;
+  font-size: 1.40rem !important;
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 2px;
+  letter-spacing: -0.3px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.kpi-tag-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 3px 0 3px 0;
+}
+
+.kpi-stat-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 5px;
+  letter-spacing: 0.2px;
+}
+
+.kpi-stat-green {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+
+.kpi-stat-red {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECDD3;
+}
+
+.kpi-stat-purple {
+  background: #F5F3FF;
+  color: #7C3AED;
+  border: 1px solid #DDD6FE;
+}
+
+.kpi-stat-blue {
+  background: #EFF6FF;
+  color: #2563EB;
+  border: 1px solid #BFDBFE;
+}
+
+.kpi-subtext {
+  color: #E2E8F0 !important;
+  font-size: 0.70rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* ==============================================================================
+   CHARTS BOX & EXPLICIT CHART HEADER BANNERS
+   ============================================================================== */
+.chart-box {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 8px 12px 4px 12px;
+  margin-bottom: 4px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeIn 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.chart-box:hover {
+  border-color: rgba(237, 28, 36, 0.35);
+  box-shadow: 0 6px 16px -2px rgba(237, 28, 36, 0.10);
+}
+
+/* Style for Streamlit native bordered containers */
+[data-testid="stVerticalBlockBorderWrapper"] > div {
+  background: var(--card-bg) !important;
+  backdrop-filter: blur(14px) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 10px 14px 8px 14px !important;
+  animation: chartCardEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  color: #FFFFFF !important;
+}
+
+[data-testid="stVerticalBlockBorderWrapper"] .chart-header-banner * {
+  color: #FFFFFF !important;
+}
+
+[data-testid="stVerticalBlockBorderWrapper"] .chart-subtitle-scope,
+[data-testid="stVerticalBlockBorderWrapper"] .chart-subtitle-scope * {
+  color: #CBD5E1 !important;
+}
+
+[data-testid="stVerticalBlockBorderWrapper"] > div:hover {
+  border-color: rgba(237, 28, 36, 0.50) !important;
+  box-shadow: 0 10px 24px -2px rgba(237, 28, 36, 0.18), 0 4px 8px rgba(0, 0, 0, 0.05) !important;
+  transform: translateY(-2px) !important;
+}
+
+@keyframes chartCardEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.chart-header-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.20) !important;
+}
+
+.chart-name-title,
+.chart-name-title span,
+.chart-name-title b,
+.chart-name-title strong,
+.chart-name-title * {
+  color: #FFFFFF !important;
+  font-size: 0.86rem !important;
+  font-weight: 800 !important;
+  margin: 0;
+  letter-spacing: -0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.6) !important;
+}
+
+.chart-type-tag {
+  background: #FFF1F2;
+  color: #ED1C24;
+  border: 1px solid #FECDD3;
+  font-size: 0.60rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+  animation: pulseBadge 3s ease-in-out infinite alternate;
+}
+
+@keyframes pulseBadge {
+  0% { box-shadow: 0 0 0 rgba(237, 28, 36, 0); }
+  50% { box-shadow: 0 0 8px rgba(237, 28, 36, 0.35); }
+  100% { box-shadow: 0 0 0 rgba(237, 28, 36, 0); }
+}
+
+.chart-subtitle-scope,
+.chart-subtitle-scope span,
+.chart-subtitle-scope * {
+  color: #CBD5E1 !important;
+  font-size: 0.72rem !important;
+  margin-top: 2px !important;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Compact Selectbox styling for minimal vertical footprint & ultra-bright white readability */
+div[data-testid="stSelectbox"] label,
+div[data-testid="stSelectbox"] label p,
+div[data-testid="stSelectbox"] label span,
+div[data-testid="stSelectbox"] [data-testid="stMarkdownContainer"] p,
+div[data-testid="stSelectbox"] [data-testid="stMarkdownContainer"] span,
+div[data-testid="stSelectbox"] [data-testid="stMarkdownContainer"] *,
+.stSelectbox label,
+.stSelectbox label p,
+.stSelectbox label span,
+label[data-testid="stWidgetLabel"],
+label[data-testid="stWidgetLabel"] p,
+label[data-testid="stWidgetLabel"] span,
+[data-testid="stWidgetLabel"],
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] span,
+[data-testid="stWidgetLabel"] * {
+  font-size: 0.76rem !important;
+  font-weight: 800 !important;
+  margin-bottom: 2px !important;
+  color: #FFFFFF !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.7) !important;
+}
+
+div[data-testid="stSelectbox"] div[data-baseweb="select"],
+.stSelectbox div[data-baseweb="select"] {
+  min-height: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  background-color: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.30) !important;
+  color: #FFFFFF !important;
+}
+
+div[data-testid="stSelectbox"] div[data-baseweb="select"]:hover,
+.stSelectbox div[data-baseweb="select"]:hover {
+  border-color: #ED1C24 !important;
+  box-shadow: 0 0 12px rgba(237, 28, 36, 0.45) !important;
+}
+
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+.stSelectbox div[data-baseweb="select"] > div {
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+  font-size: 0.80rem !important;
+  font-weight: 600 !important;
+  color: #FFFFFF !important;
+}
+
+div[data-testid="stSelectbox"] div[data-baseweb="select"] *,
+.stSelectbox div[data-baseweb="select"] * {
+  color: #FFFFFF !important;
+}
+
+div[data-testid="stSelectbox"] svg,
+.stSelectbox svg {
+  fill: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+/* Hero Card for Circle Explorer */
+.circle-hero-card {
+  background: rgba(11, 19, 43, 0.90) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  border-left: 5px solid #ED1C24 !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  box-shadow: var(--shadow-sm) !important;
+  margin-bottom: 8px !important;
+  animation: fadeIn 0.4s ease !important;
+  transition: all 0.25s ease !important;
+  color: #FFFFFF !important;
+}
+
+.circle-hero-card * {
+  color: #FFFFFF !important;
+}
+
+.circle-hero-card:hover {
+  box-shadow: var(--shadow-md) !important;
+  border-left-color: #FF5252 !important;
+}
+
+/* Streamlit Tabs Navigation — Modern Pill Style */
+.stTabs [data-baseweb="tab-list"] {
+  gap: 10px !important;
+  border-bottom: none !important;
+  margin-top: 2px !important;
+  margin-bottom: 8px !important;
+  padding: 2px 0 !important;
+}
+
+.stTabs [data-baseweb="tab"] {
+  font-size: 0.80rem !important;
+  font-weight: 700 !important;
+  padding: 4px 16px !important;
+  border-radius: 18px !important;
+  color: #F1F5F9 !important;
+  background-color: rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.20) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+  color: #FFFFFF !important;
+  border-color: #ED1C24 !important;
+  background-color: rgba(237, 28, 36, 0.35) !important;
+  transform: translateY(-1px) !important;
+}
+
+.stTabs [aria-selected="true"] {
+  color: #FFFFFF !important;
+  background: linear-gradient(135deg, #ED1C24 0%, #DC2626 100%) !important;
+  border: 1px solid #ED1C24 !important;
+  box-shadow: 0 3px 10px rgba(237, 28, 36, 0.45) !important;
+}
+
+.stTabs [data-baseweb="tab-highlight"] {
+  display: none !important;
+}
+
+/* Tab 1 Spacing & Section Divider Classes */
+.kpi-scope-strip {
+  background: rgba(11, 19, 43, 0.70);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 4px 12px 2px 12px;
+  margin-bottom: 8px;
+}
+
+.tab1-section-spacer {
+  height: 8px;
+  width: 100%;
+}
+
+.chart-filter-row {
+  margin-bottom: 6px !important;
+}
+
+/* Executive Insight Takeaway Banner */
+.executive-insight-bar {
+  background: rgba(11, 19, 43, 0.90) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  border-left: 4px solid #ED1C24 !important;
+  border-radius: 8px !important;
+  padding: 5px 14px !important;
+  margin-top: 8px !important;
+  margin-bottom: 2px !important;
+  font-size: 0.70rem !important;
+  color: #F8FAFC !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.executive-insight-bar span {
+  color: #F8FAFC !important;
+}
+
+.executive-insight-bar b {
+  color: #FFFFFF !important;
+}
+
+.insight-pill {
+  background: #FFF1F2;
+  color: #ED1C24;
+  font-weight: 800;
+  font-size: 0.62rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* ==============================================================================
+   KEYFRAME ANIMATIONS
+   ============================================================================== */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1); opacity: 0.35; }
+  100% { transform: scale(1.18); opacity: 0.70; }
+}
+
+@keyframes pulseLogo {
+  0% { box-shadow: 0 4px 16px rgba(237, 28, 36, 0.45); transform: scale(1); }
+  100% { box-shadow: 0 8px 26px rgba(237, 28, 36, 0.85); transform: scale(1.04); }
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+@keyframes shimmerBorder {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+/* ==============================================================================
+   CYBER CIRCUIT MOVING BACKGROUND ANIMATIONS
+   ============================================================================== */
+@keyframes cyberBgMove {
+  0% {
+    transform: scale(1.0) translate(0, 0);
+  }
+  25% {
+    transform: scale(1.05) translate(-1.2%, -0.8%);
+  }
+  50% {
+    transform: scale(1.08) translate(1.0%, -1.4%);
+  }
+  75% {
+    transform: scale(1.04) translate(1.4%, 0.8%);
+  }
+  100% {
+    transform: scale(1.0) translate(0, 0);
+  }
+}
+
+@keyframes cyberCircuitGlow {
+  0% {
+    filter: brightness(0.68) contrast(1.18) saturate(1.25);
+  }
+  50% {
+    filter: brightness(0.88) contrast(1.28) saturate(1.45) drop-shadow(0 0 24px rgba(237, 28, 36, 0.60));
+  }
+  100% {
+    filter: brightness(0.68) contrast(1.18) saturate(1.25);
+  }
+}
+
+@keyframes ambientCyberPulse {
+  0% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.72;
+  }
+  100% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes laserSweep {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    left: 200%;
+    opacity: 0;
+  }
+}
